@@ -1,0 +1,185 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 13, 2021, 11:16:04 PM
+    Author     : Susana Creme
+*/
+
+.no-nav #content{background:rgb(165, 233, 227)}
+
+#main-wrapper{padding:10px 20px 0 20px}
+
+.no-nav #main-wrapper{padding-left:20px}
+
+.navbar {
+    margin-bottom: 0px !important;
+}
+
+nav.navbar, footer.footer {
+    background-color: #2E5E85 !important;
+    color: #fff !important;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.btn-primary {
+    background-color: #2E5E85 !important;
+    border-color: #1c2e7c;
+}
+
+.btn-secondary {
+    background-color: #2E5E85 !important;
+    border-color: #1c2e7c;
+}
+
+.link:hover{
+    color: black !important;
+}
+
+ol.breadcrumb, ol.breadcrumb li a{
+    background: #3E7CB1;
+    border-radius: 0%;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+ol.breadcrumb li.active a {
+    color: #fff !important;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+}
+
+.container-content {
+    margin-bottom: 70px;
+}
+
+.footer a {
+    color: #fff;
+}
+
+@media (max-width: 768px){
+    .footer {
+        bottom: -250px;
+    }
+}
+
+.footer .text-center {
+    margin: 5px 0px;
+}
+
+#main{width:100%}
+
+#intro {
+    padding: .1em 0 .6em 0;
+}
+
+.logo {
+    width: 250px;
+    height: 45px;
+    background: url(../img/w.jpg);
+    background-size: 80% 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+
+#hea{
+    text-align: center;
+    height: 75px;
+    padding-left: 50px;
+    font-size: 1.50em;
+    line-height: 101px;
+    background: #fff url(../img/foto_UCI.jpg) no-repeat 0 0;
+    font-weight: bold;
+}
+
+#siteNav ul{
+    width: 230px;
+    float: left;
+    border-color: #f1f1f1;
+    text-align: left;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+a{
+    text-decoration: none;
+    color: dimgray;
+}
+
+button a {
+    color: #EBFFF7;
+}
+
+li.active a {
+    color: #999999;
+}
+
+#siteNav a{
+    display: block;
+    padding: 4px 0 4px 10px;
+    border-width: 0 5px 1px 0;
+    border-style: solid;
+    border-color: #f2f2f2 #F2F2F2;
+}
+
+#content{
+    width: 97%;
+    margin: 20px auto;
+    text-align: left;
+    padding-bottom: 21px;
+    min-width: 965px;
+    min-height: 650px;
+    /*background: #fff url() no-repeat  0;*/
+    box-shadow: 0 0 10px 0 #666;
+    border-radius: 5px;
+}
+
+.bloc {
+    padding: 10px 20px;
+    border: 1px solid #f0f0f0;
+    background: #EBFFF7;
+    color: #444;
+    border-radius: 5px;
+}
+#pagina{
+    padding: 0 20px 0 250px;
+}
+#foo{
+    height: 70px;
+    color: dimgray;
+    text-align: center;
+
+}
+
+h4 a:hover{
+    color: blueviolet;
+}
+
+.texto{
+    font-size: 16pt;
+}
+
+#dominio_nominal, #dominio_booleano, #dominio_cuantitativo, #dominio_intervalos {
+    display: none;
+}
+
+div.dominio_show {
+    display: block !important;
+}
+
+.hide {
+    display: none;
+}

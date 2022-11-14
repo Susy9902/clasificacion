@@ -1,0 +1,96 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'ayuda' %}">Ayuda</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom : 120px !important" class="texto">
+    <p><strong>Para manejar todo lo relacionado con las bases de datos de rasgos y objetos:</strong></p>
+    <p>Se accede a la página "Bases de datos".</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen BD.png" alt="Imagen BD" height="160px" />
+    <br>
+    <p><strong>Para crear una nueva base de datos de rasgos:</strong></p>
+    <p>Se selecciona el botón "Nueva" para crear una nueva base de datos de rasgos.</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen nueva BD.png" alt="Imagen nueva BD" height="160px" />
+    <p>Se escribe el nombre de la base de datos en el campo "Nueva base de datos".</p>
+    <p>Se escribe el nombre del rasgo en el campo "Nombre del rasgo".</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen crea BD.png" alt="Imagen crea BD" height="360px" />
+    <p>Se adicionan todos los rasgos que se deseen en el botón "Adicionar".</p>
+    <p>Se selecciona el criterio de comparación.</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen criterio BD.png" alt="Imagen criterio BD" height="360px" />
+    <p>En caso de seleccionar el criterio "Nominal", se adicionan tantos dominios como se deseen crear con el botón Adicionar y se escriben los valores de los dominios, solo admite letras y caracteres en blanco.</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen criterio Nominal.png" alt="Imagen criterio Nominal" height="300px" />
+    <p>En caso de seleccionar el criterio "Booleano", no se deberán escribir valores para el dominio ya que por defecto serán "Si" y "No"</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen criterio Booleano.png" alt="Imagen criterio Booleano" height="210px" />
+    <p>En caso de seleccionar el criterio "Cuantitativo", se adicionan tantos dominios como se deseen crear con el botón Adicionar y se escriben los valores de los dominios, solo admite valores numéricos.</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen criterio Cuantitativo.png" alt="Imagen criterio Cuantitativo" height="300px" />
+    <p>En caso de seleccionar el criterio "Por intervalos", se adicionan tantos intervalos como se deseen crear con el botón Adicionar, solo admite valores numéricos, donde el valor del campo Inicio debe ser menor que el del valor del campo Fin, y donde los valores de los campos Fin deben ser menores que los campos Inicio del intervalo anterior.</p>
+    <img src="../static/img/fotos_ayuda/Add_rasgo/Imagen criterio por intervalos.png" alt="Imagen criterio por intervalos" height="300px" />
+    <p>Se selecciona el botón "Finalizar".</p>
+    <p></p>
+    <br>
+    <p><strong>Para modificar una base de datos de rasgos:</strong></p>
+    <p>Se busca en la "Lista de rasgos" y se selecciona el botón "Modificar" de la base de datos que se desee modificar.</p>
+    <img src="../static/img/fotos_ayuda/Edit_rasgo/Imagen lista DB rasgo.png" alt="Imagen lista DB rasgo" height="300px" />
+    <p>Se procede a modificar los valores que se desee.</p>
+    <img src="../static/img/fotos_ayuda/Edit_rasgo/Imagen edita BD rasgo.png" alt="Imagen edita DB rasgo" height="300px" />
+    <p>Se selecciona el botón "Finalizar".</p>
+    <p></p>
+    <br>
+    <p><strong>Para eliminar una base de datos de rasgos:</strong></p>
+    <p>Se busca en la "Lista de rasgos" y se selecciona el botón "Eliminar" de la base de datos que se desee eliminar.</p>
+    <img src="../static/img/fotos_ayuda/Edit_rasgo/Imagen elimina DB rasgo.png" alt="Imagen elimina DB rasgo" height="300px" />
+    <p>Selecciona el botón "Eliminar".</p>
+    <img src="../static/img/fotos_ayuda/Edit_rasgo/Imagen confirma elimina BD rasgo.png" alt="Imagen confirma elimina BD rasgo" height="300px" />
+    
+    <p></p>
+    <br>
+    <p><strong>Para adicionar objetos a una base de datos de rasgos:</strong></p>
+    <p>Se busca en la Lista de objetos y se selecciona el botón "Adicionar" de la base de datos que se desee añadir objetos.</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen lista BD objeto.png" alt="Imagen lista BD objeto" height="160px" />
+    <p>Se adicionan todos los objetos que se deseen en el botón "Adicionar".</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen adiciona objeto.png" alt="Imagen adiciona objeto" height="160px" />
+    <p>Se escribe el nombre del objeto en el campo "Nombre del objeto".</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen escribe objeto.png" alt="Imagen escribe objeto" height="160px" />
+    <p>Se seleccionan los dominios a los objetos que se deseen para cada rasgo.</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen dominio rasgo objeto.png" alt="Imagen dominio rasgo objeto" height="160px" />
+    <p>Se selecciona el botón "Finalizar".</p>
+    <br>
+    <p><strong>Para modificar objetos en una base de datos de rasgos:</strong></p>
+    <p>Se busca en la Lista de objetos y se selecciona el botón "Modificar" de la base de datos que se desee modificar objetos.</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen edita BD objeto.png" alt="Imagen edita BD objeto" height="160px" />
+    <p>Se modifican los objetos y los dominios de los rasgos que se deseen.</p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen edita objeto.png" alt="Imagen edita objeto" height="160px" />
+    <p>Se selecciona el botón "Finalizar".</p>
+    <br>
+    <p><strong>Para eliminar los objetos:</strong></p>
+    <img src="../static/img/fotos_ayuda/Add_objeto/Imagen elimina objeto.png" alt="Imagen elimina objeto" height="160px" />
+    <br>
+    <p><strong>Para manejar todo lo relacionado con las bases de datos de rasgos y objetos:</strong></p>
+    <p>Se accede a la página "Clasificación".</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen clasificar BD.png" alt="Imagen clasificar BD" height="160px" />
+    <p><strong>Para crear los grupos:</strong></p>
+    
+    <p>Se selecciona el botón "Clasificar" en la base de datos deseada.</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen clasificar.png" alt="Imagen clasificar" height="160px" />
+    <p>Se selecciona el tipo de umbral de semejanza.</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen seleccionar umbral.png" alt="Imagen seleccionar umbral" height="160px" />
+    <p>En caso de seleccionar "Criterio de expertos", se escribe un número entre 0 y 1 en el campo de texto.</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen ver grupos.png" alt="Imagen ver grupos" height="160px" />
+    <p>En caso de seleccionar "Calculado por el sistema", se selecciona el tipo de criterio de experto: "Mínimo", "Máximo" o "Media".</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen ver grupos.png" alt="Imagen ver grupos" height="160px" />
+    <p>Se selecciona el botón "Finalizar".</p>
+    <br>
+    <p><strong>Para ver los grupos creados:</strong></p>
+    <p>Se selecciona el botón "Ver grupos" en la base de datos donde se crearon los grupos.</p>
+    <img src="../static/img/fotos_ayuda/Grupos/Imagen ver grupos.png" alt="Imagen ver grupos" height="160px" />
+    <p></p>
+   
+</div>
+{% endblock %}

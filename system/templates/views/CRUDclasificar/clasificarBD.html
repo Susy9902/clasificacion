@@ -1,0 +1,182 @@
+{% extends 'layout/content.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clasificacion' %}">Clasificaci&oacute;n</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clasificarBD' pk=pk %}">Clasificar BD</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="main-wrapper" style="margin-bottom : 120px !important">
+    <section id="main">
+       <form>
+           <fieldset>
+               <legend>Umbral de semejanza</legend>
+               <div class="radio">
+                <label>
+                <input type="radio" name="optionsRadios1" id="optionsRads1" value="option01">
+                Criterio de expertos
+                </label>
+                <input type="number" name="valor_experto" id="valor_experto" placeholder="Entre 0 y 1">
+                
+            </div>
+            <div class="radio">
+                <label>
+                <input type="radio" name="optionsRadios1" id="optionsRads2" value="option02">
+                Calculado por el sistema
+                    <select name="umbral_calculado" class="form-control">
+                        <option selected disabled value="-1">--Seleccione--</option>
+                        <option value="0">Mínimo</option>
+                        <option value="1">Máximo</option>
+                        <option value="2">Media</option>
+                    </select>
+                </label>
+            </div>
+           </fieldset>
+        </form>
+        <form>
+           <fieldset>
+               <legend>Criterio de agrupamiento</legend>
+               <div class="radio">
+                    <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" disabled>
+                    &#946<sub>0</sub> - Conexo
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" checked>
+                    &#946<sub>0</sub> - Compacto
+                    </label>
+                </div>
+                
+                {% csrf_token %}
+                <hr>
+                <div>
+                    <a href="{% url 'clasificacion' %}" class="mr-3">
+                        <button type="button" class="btn btn-danger">Cancelar</button>
+                    </a>
+                    <button type="button" onclick="send_grupo()" class="btn btn-success">Finalizar</button>
+                    <br><br>
+                </div>
+           </fieldset>
+            
+       </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/sweetalert2@11.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    function send_grupo() {
+        let error = false;
+        let criterio_si = 1;
+        let umbral_si = 1;
+        // Extraer y validar seleccion umbral
+        const selec_umbral = $('form input[name="optionsRadios1"]:checked').val();
+        if (validator.isNull(selec_umbral)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Debe seleccionar el Umbral de semejanza',
+              });
+            error = true;
+            return;
+        }
+
+        const experto = $('form input[name="valor_experto"]').val();
+        const calculado = $('form select[name="umbral_calculado"]').val();
+        if (selec_umbral === "option01") {
+            // Validar criterio experto
+            if (validator.isNullOrEmpty(experto)){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El campo umbral esta vacio!',
+                  });
+                error = true;
+                return;
+            }
+
+            if (!validator.isNumber(experto) || Number(experto) < 0 || Number(experto) > 1){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El campo umbral debe ser número y no puede estar fuera de rango',
+                  });
+                error = true;
+                return;
+            }
+        } else {
+            // Validar criterio calculado
+
+            if (validator.isNullOrEmpty(calculado)){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar un Umbral calculado!',
+                  });
+                error = true;
+                return;
+            }
+        }
+        
+        // Extraer y validar seleccion criterio
+        const criterio = $('form input[id="optionsRadios2"]');
+        if (!criterio.is(":checked")){
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Debe seleccionar el criterio β0 - Compacto ',
+              });
+            error = true;
+            return;
+        }
+        
+        if (!error) {
+            let csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+            let data = {
+                'umbral': experto,
+                //'csrfmiddlewaretoken': csrftoken
+                'criterio' : criterio_si,
+                'calculado' : umbral_si,
+            };
+            if (selec_umbral === "option01") {
+                data.umbral_tipo = '-1';
+            } else {
+                data.umbral_tipo = calculado;
+            }
+
+            // Enviar datos al backend
+            if (!error) {
+                $.ajax({
+                    url: '/{{pk}}/clasificarBD/',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function(data, textStatus) {
+                        // Mostrar cartel de OK
+                        Swal.fire(
+                            'Agregado!',
+                            'Redirigiendo al listado de clasificación!',
+                            'success'
+                        );
+
+                        window.location = "/clasificacion/";
+                    }
+                });
+            }
+        }
+    }
+</script>
+{% endblock %}

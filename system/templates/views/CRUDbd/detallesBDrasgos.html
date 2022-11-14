@@ -1,0 +1,28 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'listar_db' %}">Bases de datos</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'detallesBDrasgos' pk=item.id %}">Listar BD rasgos</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="main-wrapper" style="margin-bottom : 120px !important">
+    <h2>Nombre: {{ item.nombre }}</h2>
+    <div>
+        {% for rasgo in rasgos %}
+            <dl>
+                <dt class="text-capitalize">{{ rasgo.nombre }}</dt>
+                {% for dominio in rasgo.dominio %}
+                    <dd>{{ dominio }}</dd>
+                {% endfor %}
+            </dl>
+        {% endfor %}
+    </div>
+    <button type="button" class="btn btn-secondary"><a href="{% url 'editarBD' pk=item.id %}">Modificar</a></button>
+</div>
+{% endblock %}

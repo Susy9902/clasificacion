@@ -1,0 +1,17 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><a href="{% url 'home' %}">Principal</a></li>
+    </ol>
+    
+</nav>
+{% endblock %}
+
+{% block content %}
+<header><h1 id="intro" style="text-align : center">Bienvenido</h1></header><br><br>
+<div style="display:flex; justify-content:center">
+    <img src="../../static/img/indice.png" alt="Imagen" height="190px" />
+</div>
+{% endblock %}

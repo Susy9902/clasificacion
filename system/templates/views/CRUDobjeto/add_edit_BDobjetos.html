@@ -1,0 +1,173 @@
+{% extends 'layout/content.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+    <nav arial-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'listar_db' %}">Bases de datos</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'modificarBDobjeto' pk=db_item.id %}">Agregar BD
+                objeto</a></li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div id="main-wrapper">
+        <section id="main" style="margin-bottom : 120px !important">
+            <h4>Agregar objetos: <button type="button" onclick="add_objeto()" class="btn btn-primary">Adicionar</button></h4>
+            <form method="post">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Objeto</th>
+                        {% for head in heads %}
+                        <th>{{ head }}</th>
+                        {% endfor %}
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="list_objetos">
+                    {% for item in items %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="nombre_objeto" id="rasgo" value="{{ item.nombre }}" placeholder="Nombre del rasgo">
+                            </div>
+                        </td>
+                        {% for rasgo in item.rasgos %}
+                        <td>
+                            <div class="form-group">
+                                <select name="valor_objeto" class="form-control">
+                                {% for value in rasgo.values %}
+                                    <option value="{{ value.id }}" {% if value.value == rasgo.value %}selected{% endif %}>{{ value.value }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </td>
+                        {% endfor %}
+                        <td>
+                            <button type="button" onclick="delete_objeto(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+        
+                {% csrf_token %}
+                
+                <a href="{% url 'listar_db' %}"><button type="button" class="btn btn-danger">Cancelar</button></a>
+                
+                <button type="button" onclick="send_form()" class="btn btn-success">Finalizar</button>
+            </form>
+        </section>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/sweetalert2@11.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        function add_objeto() {
+            // Agregar un HTML con un objeto nuevo y sus atributos
+            $("#list_objetos").append(`
+            <tr>
+                <th scope="row">`+ String($("#list_objetos tr").length + 1) +`</th>
+                <td>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="nombre_objeto" id="rasgo" required placeholder="Nombre del objeto">
+                    </div>
+                </td>
+                {% for rasgos in items_rasgos %}
+                <td>
+                    <div class="form-group">
+                        <select name="valor_objeto" class="form-control" required>
+                        <option value="-1" selected>--Seleccione--</option>
+                        {% for rasgo in rasgos %}
+                            <option value="{{ rasgo.id }}">{{ rasgo.value }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </td>
+                {% endfor %}
+                <td>
+                    <button type="button" onclick="delete_objeto(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                </td>
+            </tr>`);
+        }
+        
+        function delete_objeto(element) {
+            $(element).parent().parent().remove();
+        }
+
+        function send_form() {
+            // Recolectar datos del formulario
+            let objetos = [];
+            let csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+            // Recorrer listado de objetos
+            let i = 1;
+            let error = false;
+            $("tbody#list_objetos tr").each(function() {
+                let dominio = [];
+                
+                const rasgo = $(this);
+                rasgo.find('select[name="valor_objeto"]').each(function() {
+                    dominio.push($(this).val());
+                });
+
+                const nombre = rasgo.find('input[name="nombre_objeto"]').val();
+                if (validator.isEmpty(nombre)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El campo nombre del objeto #' + String(i) + ' esta vacio',
+                      });
+                    error = true;
+                }
+                if (dominio.some(e => e == -1)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debes seleccionar un dominio para el objeto #' + String(i),
+                      });
+                      error = true;
+                }
+
+                objetos.push({
+                    "nombre": nombre,
+                    "rasgos": dominio
+                });
+                i++;
+            });
+
+            if (objetos.length === 0 || error) {
+                // Agregar error de que no hay elementos
+                return;
+            }
+
+            // Enviar datos al backend
+            $.ajax({
+                url: '/' + String({{ pk }}) + '/modificarBDobjeto/',
+                type: 'POST',
+                data: JSON.stringify(objetos),
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                success: function(data, textStatus) {
+                    window.location = "/listarBD/";
+                }
+            });
+            Swal.fire(
+                'Agregado!',
+                'Redirigiendo al listado de bases de datos!',
+                'success'
+            );
+        }
+        {% if mode == "add" %}add_objeto();{% endif %}
+    </script>
+{% endblock %}

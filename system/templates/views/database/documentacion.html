@@ -1,0 +1,95 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'documentacion' %}">Documentaci&oacuten</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="texto">
+    <article>
+        <h3>Reconocimiento de Patrones</h3>
+        <p>El reconocimiento de patrones es la ciencia que se ocupa de los procesos sobre ingeniería, computación y matemáticas relacionados con objetos físicos o abstractos, con el propósito de extraer información que permita establecer propiedades de entre conjuntos de dichos objetos.</p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </article>
+    <br>
+    <article>
+        <h3>Reconocimiento L&oacute;gico Combinatorio de Patrones</h3>
+        <p>Es la zona del conocimiento que se ocupa del desarrollo de teorías, métodos, técnicas y dispositivos computacionales para la realización de procesos ingenieriles, computacionales y/o matemáticos relacionados con objetos físicos y abstractos, que tienen el propósito de extraer información, que permite establecer propiedades y vínculos de o entre conjuntos de dichos objetos sobre la base de los cuales se realiza una tarea de identificación o clasificación. Se basa en la idea de que la modelación del problema debe ser lo más cercana posible a la realidad del mismo, sin hacer suposiciones que no estén fundamentadas. Las características para describir los objetos de estudio deben ser tratadas cuidadosamente.</p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </article>
+    <br>
+    <article>
+        <h3>Selecci&oacuten de rasgos</h3>
+        <p>Los Problemas del Reconocimiento de Patrones son todos aquellos relacionados con la clasifica-ción de objetos y fenómenos y con la determinación de los factores que inciden en los mismos.</p>
+        <p>Selección de variables: - Consiste en determinar cuál es el conjunto de características más adecuado para describir a los objetos. Tienen dos manifestaciones fundamentales: </p>
+        <ul>
+            <li>a) para reducir el número de rasgos en términos de los cuales se deben describir los objetos en modo eficiente </li>
+            <li>b) para encontrar los rasgos que inciden en el problema de manera determinante.</li>
+        </ul>
+        
+        <p></p>
+        <p></p>
+    </article>
+    <br>
+    <article>
+        <h3>Clasificaci&oacuten Supervisada</h3>
+        <p>Consiste en determinar cuál es el conjunto de características más adecuado para describir a los objetos. En el aprendizaje supervisado, los algoritmos usan datos que ya han sido etiquetados u organizados previamente para indicar cómo tendría que ser categorizada la nueva información. Con este método, se requiere la intervención humana para proporcionar retroalimentación. </p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </article>
+    <br>
+    <article>
+        <h3>Clasificaci&oacuten No Supervisada</h3>
+        <p>Clasificación no supervisada: consiste en dada una muestra no clasificada encontrar la clasificación de la misma. En el aprendizaje no supervisado, los algoritmos no usan ningún dato etiquetado u organizado previamente para indicar cómo tendría que ser categorizada la nueva información, sino que tienen que encontrar la manera de clasificarlas ellos mismos. Por tanto, este método no requiere la intervención humana. </p>
+        
+        <p></p>
+        <p></p>
+    </article>
+</div>
+<div class="texto">
+    <p>Los algoritmos de clasificación no supervisada para su ejecución necesitan como entradas: un conjun-to de objetos o matriz inicial (MI), además de una función de semejanza, un umbral de semejanza y un criterio de agrupamiento. Como salida se obtiene una matriz de aprendizaje (MA) que se compone por las clases o grupos resultantes.</p>
+    <p>
+        Los pasos a seguir son:  
+        <ul>                                     
+            <li>Calcular la Matriz de Semejanza (MS)</li>
+            <li>Calcular el Umbral de Semejanza (β0) </li>
+            <li>Agrupar siguiendo el criterio de agrupamiento (π)</li>
+        </ul>
+    </p>
+    <p>Matriz inicial o Muestra Inicial: es una matriz donde las filas son las descripciones de los objetos y las columnas los rasgos.</p>
+    <p>Función de Semejanza: nos permite la comparación o el grado de semejanza entre dos descripcio-nes de objetos. A continuación, se presenta la fórmula para el cálculo de la función de semejanza que se implementará en el sistema, la cual nos indica que dado el rasgo Xi de los objetos Ot (objeto t)y Oo (objeto o) si son iguales suman 1 y 0 en otro caso.</p>
+    imagen
+    <p>Matriz de Semejanza (MS): a partir de MI y β (la medida de similaridad o semejanza) se puede cons-truir una matriz que refleje las relaciones de semejanza entre todos los objetos sujetos a estudio. Es una matriz simétrica y la diagonal principal es 1 o 100 dependiendo de la escala en la que se trabaje.</p>
+    <p>Umbral de Semejanza (β0): es la magnitud de semejanza que se exigirá que tengan los objetos de un mismo grupo o clase. Su valor puede ser dado por el experto o puede calcularse mediante cualquiera de las tres formas siguientes: </p>
+    <p></p>
+    <ul>
+        <li>Se calcula hallando la media del valor de semejanza entre los objetos.</li>
+        imagen
+        <li>Se calcula buscando el mínimo valor de semejanza por filas y seleccionando el mayor de esos mínimos.</li>
+        imagen
+        <li>Se calcula buscando el máximo valor de semejanza por filas y se divide entre la cantidad de objetos.</li>
+        imagen
+    </ul>
+    <p>Criterios de Agrupamiento (π): La selección de un criterio de agrupamiento puede realizarse de maneras diferentes</p>
+    <ul>
+        <li>Se llega al criterio de agrupamiento mediante la modelación matemática del problema y por la misma vía se llega al paradigma de realización de la estructuración del conjunto de objetos.</li>
+        <li>Se supone el paradigma, es decir, se impone, y se condiciona el criterio de agrupamiento de modo tal que resulte una estructuración acorde con el paradigma seleccionado.</li>
+    </ul>
+    <p>Componente β0 – compacto: Se basa en tres condiciones: a) Todo elemento de B tiene en B al elemento que más se le parece que es β0 semejante con él; b) No existe fuera de B un elemento cuyo elemento más parecido que sea β0 este en B; c) y d) Dicen que B debe ser el conjunto más pequeño de cardinalidad mayor o igual que 1. Esto se traduce a lo siguiente: Dada una matriz de semejanza y un umbral de semejanza, se busca en la primera fila el mayor valor de semejanza de los mayores o iguales al umbral y se añaden los objetos relacionados a ese mayor a un grupo. Luego se analiza en la fila del objeto al cual se seleccionó su semejanza con el primero, así sucesivamente.</p>
+    <p>Componente β0 – conexo: Se basa en dos condiciones: a) Para cualquier par de elementos C existe una sucesión de elementos en C, que empieza en Oi y termina en Oj tales que uno es β0 semejante al siguiente; b) No existe fuera de C un elemento β0 semejante a un elemento de C. Esto se traduce a lo siguiente: Dada una matriz de semejanza y un umbral de semejanza, se buscan en la primera fila los mayores valores de semejanza de los mayores o iguales al umbral y se añaden los objetos relacionados a esos valores a un grupo. Luego se analizan las filas de los objetos a los cuales se seleccionaron su semejanza con el primero, así sucesivamente.</p>
+    <p></p>
+</div>
+<div style="margin-bottom : 120px !important"></div>
+{% endblock %}

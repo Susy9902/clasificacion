@@ -1,0 +1,16 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item "><a href="{% url 'clasificacion' %}">Bases de datos</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'listargrupos' %}">Listar Grupos</a></li>
+
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

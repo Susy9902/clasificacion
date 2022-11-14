@@ -1,0 +1,17 @@
+{% extends 'layout/content.html' %}
+
+{% block content %}
+<div>
+    <h2>Usuario: {{ User }}</h2>
+    <div>
+        <p>{{ User.id }}</p>
+        {% for User in object_list %}
+        <dl>    
+            <dt class="text-capitalize">{{ User.id }}</dt>
+                <dd></dd>
+        </dl>   
+        {% endfor %}
+    </div>
+    <button type="button" class="btn btn-success"><a href="#">Editar</a></button>
+</div>
+{% endblock %}

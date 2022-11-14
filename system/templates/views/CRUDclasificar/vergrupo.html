@@ -1,0 +1,49 @@
+{% extends 'layout/content.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clasificacion' %}">Clasificaci&oacute;n</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clasificarBD' pk=pk %}">Clasificar BD</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'vergrupo' pk=pk %}">Ver Grupo</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="main-wrapper" style="margin-bottom : 120px !important">
+    <section id="main">
+        <h2>Matriz de semejanza</h2>
+        <table class="table" id="matriz_semejanza">
+            {% for fila in tabla %}
+                <tr>
+                {% for col in fila %}
+                    <td>{{ col }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="row">
+            <div class="col-md-4" id="umbral">
+                <h2>Umbral</h2>
+                <p>{{ umbral }}</p>
+            </div>
+            <div class="col-md-8" id="grupo">
+                <h2>Grupos</h2>
+                {% for grupo in grupos %}
+                <p>G = { {% for objeto in grupo %}{{ objeto }}, {% endfor %} }</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/sweetalert2@11.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    
+</script>
+{% endblock %}

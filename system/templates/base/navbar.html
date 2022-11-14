@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-md navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <div class="logo"></div>
+        <div class="d-md-block d-none">Sistema de Clasificaci&oacute;n</div>
+    </a>
+    {% if user.is_authenticated %}
+        <p><b> {{user.username}} | <a href="{% url "logout_view" %}" style="color: white">Cerrar sesión</a></b></p>
+    {% else %}
+        <p>Por favor, <b><a href="{% url "login_page" %}" style="color: white"> log in</a></b></p>
+        
+    {% endif %}
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav ml-auto" style="font-size: x-large;">
+            <li class="nav-item {% if active == '0' %}active{% endif %}" title="Este es el inicio de nuestro programa">
+                <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+            </li>
+            <li class="nav-item {% if active == '1' %}active{% endif %}" title="Aqu&iacute; encontrar&aacute;s todo lo relacionado al tema">
+                <a class="nav-link" href="{% url 'documentacion' %}">Documentaci&oacute;n</a>
+            </li>
+            <li class="nav-item {% if active == '2' %}active{% endif %}" title="Secci&oacute;n dedicada a almacenar nuestros datos">
+                <a class="nav-link" href="{% url 'listar_db' %}">Bases de datos</a>
+            </li>
+            <li class="nav-item {% if active == '3' %}active{% endif %}" title="Secci&oacute;n dedicada a la clasificaci&oacute;n no supervisada de las bases de datos">
+                <a class="nav-link" href="{% url 'clasificacion' %}">Clasificaci&oacute;n</a>
+            </li>
+            <li class="nav-item {% if active == '4' %}active{% endif %}" title="Aqu&iacute; podr&aacute;s aprender a utilizar este software">
+                <a class="nav-link" href="{% url 'ayuda' %}">Ayuda</a>
+            </li>
+        </ul>
+        <button onclick="darkMode()"></button>
+        <p id="a"></p>
+    </div>
+  </nav> 
+{% block scripts %}
+<script type="text/javascript">
+    function darkMode() {
+        var element = document.getElementById("a");
+        element.style.color = "blue";
+    }
+</script>
+{% endblock %}

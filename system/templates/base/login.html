@@ -1,0 +1,18 @@
+<div class="container">
+    {% block content %}
+        <div id="main-wrapper" style="border: 1px solid grey; border-radius: 4px; overflow: hidden; width: 28em; min-width: 300px; margin: 100px auto; height: auto; padding : 0px">
+            <h3 style="text-align : center; padding: 15px 1px; background: #417690 ! important; color : white">Autenticación</h3>
+            <br>
+            <p style="text-align : center">
+            {% if message %}
+            <b>{{message}}</b>
+            {% endif %}
+            </p>
+            <form action="" style="text-align : center" method="post">{% csrf_token %}
+                {{form.as_p}}
+                <br>
+                <input type="submit" class="btn btn-success" style="padding : 8px 17px; margin : 10px 20px" value="Acceder"/>
+            </form>
+        </div>
+        {% endblock %}
+</div>

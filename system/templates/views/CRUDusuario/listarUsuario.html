@@ -1,0 +1,19 @@
+{% extends 'layout/content.html' %}
+
+{% block content %}
+    <h2>Usuarios</h2>
+    <table>
+        {% for User in object_list %}
+            <tr id="us_{{ User.id }}">    
+                <td>{{ forloop.counter }}-</td>
+                <td>{{ User }}</td>
+                <td><button type="button" class="btn btn-secondary"><a href="{% url 'detalle' pk=User.id %}">Detalles</a></button></td>
+                <td><button type="button" class="btn btn-danger">Eliminar</button></td>
+                <td><button type="button" class="btn btn-success">Editar</button></td>
+            </tr>
+        {% empty %}
+            Añada nuevos usuarios
+        {% endfor %}
+    </table>
+
+{% endblock %}

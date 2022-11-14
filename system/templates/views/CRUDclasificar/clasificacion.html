@@ -1,0 +1,40 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'clasificacion' %}">Clasificaci&oacute;n</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="main-wrapper" style="margin-bottom : 120px !important">
+    <section id="main">
+        <header><h1 id="intro">Bases de datos </h1></header>
+        <div class="col-md-6">
+            <table>
+                {% for item in items %}
+                    <tr id="rasgo_{{ item.id }}">
+                        <td>{{ forloop.counter }}-</td>
+                        <td>{{ item.nombre }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'listarBDobjetos' pk=item.id %}">Detalles</a></button>
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'clasificarBD' pk=item.id %}">Clasificar</a></button>
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'vergrupo' pk=item.id %}">Ver grupos</a></button>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    Añada nuevas bases de datos
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

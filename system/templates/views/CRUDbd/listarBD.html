@@ -1,0 +1,99 @@
+{% extends 'layout/content.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+    <nav arial-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'listar_db' %}">Bases de datos</a></li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <header><h1 id="intro">Bases de datos <a href="{% url 'crearBD' %}" class="btn btn-primary">Nueva</a></h1></header>
+    <div class="row" style="margin-bottom : 120px !important">
+        <div class="col-md-6">
+            <h4>Lista de Rasgos</h4>
+            <table>
+                {% for item in items %}
+                    <tr id="db_{{ item.id }}">
+                        <td>{{ forloop.counter }}-</td>
+                        <td>{{ item.nombre }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'detallesBDrasgos' pk=item.id %}">Detalles</a></button>
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'editarBD' pk=item.id %}">Modificar</a></button>
+                                <button type="button" class="btn btn-secondary" onclick="delete_db({{ item.id }}, '{{ item.nombre }}')">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    Añada nuevas bases de datos
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Lista de objetos</h4>
+            <table>
+                {% for item in items %}
+                    <tr id="rasgo_{{ item.id }}">
+                        <td>{{ forloop.counter }}-</td>
+                        <td>{{ item.nombre }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'agregarBDobjetos' pk=item.id %}">Adicionar</a></button>
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'listarBDobjetos' pk=item.id %}">Detalles</a></button>
+                                <button type="button" class="btn btn-secondary"><a
+                                        href="{% url 'modificarBDobjeto' pk=item.id %}">Modificar</a></button>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    Añada nuevas bases de datos
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/sweetalert2@11.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        function delete_db(id, name) {
+            // Mostrar cartel de eliminado
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "La base de datos: " + name + " será eliminada",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar peticion al backend
+                    $.get('/' + id + '/eliminarBD/');
+
+                    // Eliminar db y rasgo
+                    $('tr[id="db_' + id + '"]').remove();
+                    $('tr[id="rasgo_' + id + '"]').remove();
+
+                    // Mostrar cartel de OK
+                    Swal.fire(
+                        'Eliminado!',
+                        'Eliminado con éxito!',
+                        'success'
+                    )
+                }
+            });
+        }
+    </script>
+{% endblock %}

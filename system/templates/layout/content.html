@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+
+{% include 'base/navbar.html' %}
+
+{% block breadcrumb %}{% endblock %}
+
+
+<section class="container-fluid container-content">
+    {% block content %}{% endblock %}
+</section>
+{% include 'base/footer.html' %}
+{% endblock %}

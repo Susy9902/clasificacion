@@ -1,0 +1,377 @@
+{% extends 'layout/content.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<nav arial-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'listar_db' %}">Bases de datos</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'editarBD' pk=item.id %}">Editar BD</a></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div id="main-wrapper" style="margin-bottom : 120px !important">
+    <form method="post">
+        <header>
+            <h5 id="intro">Nombre de la base de datos:
+                <input type="text" name="db_nombre" value="{{ item.nombre }}" id="tema" placeholder="Nombre base de datos">
+            </h5>
+        </header>
+        <hr>
+        <h5 class="mb-2">Rasgos a Adicionar:<button type="button" onclick="add_rasgo()" class="btn btn-primary">Adicionar</button></h5>
+        <section id="main">
+            <div class="row" id="list_rasgos">
+                {% for rasgo in rasgos %}
+                <div id="rasgo" class="col-md-3">
+                    <div class="form-group">
+                        <label>Rasgo
+                            <button type="button" onclick="delete_rango(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                            <input type="text" class="form-control" value="{{ rasgo.nombre }}" name="nombre_rasgo" id="rasgo" placeholder="Nombre del rasgo">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Criterio de comparaci&oacute;n
+                            <select name="criterio_rasgo" class="form-control" onchange="handle_dominio(this);">
+                                <option disabled value="-1">--Seleccione--</option>
+                                <option value="0" {% if rasgo.criterio == 0 %}selected{% endif %}>Nominal</option>
+                                <option value="1" {% if rasgo.criterio == 1 %}selected{% endif %}>Booleano</option>
+                                <option value="2" {% if rasgo.criterio == 2 %}selected{% endif %}>Cuantitativo</option>
+                                <option value="3" {% if rasgo.criterio == 3 %}selected{% endif %}>Por intervalos</option>
+                            </select>
+                            <div class="invalid-feedback">Debe seleccionar alguno.</div>
+                        </label>
+                    </div>
+                    <div class="form-group" id="form_dominio" {% if rasgo.criterio == 1 %}style="display: none;"{% endif %}>
+                        <label>Dominios:
+                            <button type="button" onclick="add_dominio(this)" class="btn btn-sm btn-secondary mb-2">Adicionar</button>
+                            <div id="dominio_nominal" {% if rasgo.criterio == 0 %}class="dominio_show"{% endif %}>
+                                {% if rasgo.criterio == 0 %}
+                                {% for dominio in rasgo.dominio %}
+                                <div class="row">
+                                    <div style="width: 200px; margin: 2px">
+                                        <input type="text" name="dominio" value="{{ dominio }}" class="form-control" onkeyup="validate_dominio_by_criterio(this)">
+                                    </div>
+                                    <div style="margin: 6px">
+                                        <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div id="dominio_booleano" {% if rasgo.criterio == 1 %}class="dominio_show"{% endif %}></div>
+                            <div id="dominio_cuantitativo" {% if rasgo.criterio == 2 %}class="dominio_show"{% endif %}>
+                                {% if rasgo.criterio == 2 %}
+                                {% for dominio in rasgo.dominio %}
+                                <div class="row">
+                                    <div style="width: 200px; margin: 2px">
+                                        <input type="text" name="dominio" value="{{ dominio }}" class="form-control" onkeyup="validate_dominio_by_criterio(this)">
+                                    </div>
+                                    <div style="margin: 6px">
+                                        <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div id="dominio_intervalos" {% if rasgo.criterio == 3 %}class="dominio_show"{% endif %}>
+                                {% if rasgo.criterio == 3 %}
+                                {% for dominio in rasgo.dominio %}
+                                <div class="row">
+                                    <div style="width: 200px; margin: 2px" class="row">
+                                        <input type="text" name="dominio" value="{{ dominio.0 }}" placeholder="Inicio" class="form-control col-sm-6" onkeyup="validate_dominio_by_criterio(this)">
+                                        <input type="text" name="dominio" value="{{ dominio.1 }}" placeholder="Fin" class="form-control col-sm-6" onkeyup="validate_dominio_by_criterio(this)">
+                                    </div>
+                                    <div style="margin: 6px">
+                                        <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <hr>
+
+        {% csrf_token %}
+        
+        <a href="{% url 'listar_db' %}"><button type="button" class="btn btn-danger">Cancelar</button></a>
+        
+        <button type="button" onclick="send_form()" class="btn btn-success">Finalizar</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/sweetalert2@11.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    function add_rasgo() {
+        // Agregar un HTML con un formulario de rasgo
+        $( "#list_rasgos" ).append(`<div id="rasgo" class="col-md-3">
+            <div class="form-group">
+                <label>Rasgo
+                    <button type="button" onclick="delete_rango(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                    <input type="text" class="form-control" name="nombre_rasgo" id="rasgo" placeholder="Nombre del rasgo">
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Criterio de comparaci&oacute;n
+                    <select name="criterio_rasgo" class="form-control" onchange="handle_dominio(this);">
+                        <option selected disabled value="-1">--Seleccione--</option>
+                        <option value="0">Nominal</option>
+                        <option value="1">Booleano</option>
+                        <option value="2">Cuantitativo</option>
+                        <option value="3">Por intervalos</option>
+                    </select>  
+                    <div class="invalid-feedback">Debe seleccionar alguno.</div>
+                </label>
+            </div>
+            <div class="form-group" id="form_dominio" style="display: none;">
+                <label>Dominios:
+                    <button type="button" onclick="add_dominio(this)" class="btn btn-sm btn-secondary mb-2">Adicionar</button>
+                    <div id="dominio_nominal">
+                        <div class="row">
+                            <div style="width: 200px; margin: 2px">
+                                <input type="text" name="dominio" class="form-control" onkeyup="validate_dominio_by_criterio(this)">
+                            </div>
+                            <div style="margin: 6px">
+                                <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="width: 200px; margin: 2px">
+                                <input type="text" name="dominio" class="form-control" onkeyup="validate_dominio_by_criterio(this)">
+                            </div>
+                            <div style="margin: 6px">
+                                <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dominio_booleano"></div>
+                    <div id="dominio_cuantitativo"></div>
+                    <div id="dominio_intervalos"></div>
+                </label>
+            </div>
+        </div>`);
+    }
+    function handle_dominio(element) {
+        const value = Number($(element).val()), parent = $(element).parent().parent().parent();
+        // Esconder el activo
+        parent.find('div.dominio_show').first().removeClass('dominio_show');
+
+        // Mostrar el seleccionado
+        parent.find('#form_dominio').first().show();
+        switch (value) {
+            case 0:  // dominio_nominal
+                parent.find('#dominio_nominal').first().addClass('dominio_show');
+                break;
+            case 1:  // dominio_booleano
+                parent.find('#dominio_booleano').first().addClass('dominio_show');
+                parent.find('#form_dominio').first().hide();
+                break;
+            case 2:  // dominio_cuantitativo
+                parent.find('#dominio_cuantitativo').first().addClass('dominio_show');
+                break;
+            case 3:  // dominio_intervalos
+                parent.find('div#dominio_intervalos').first().addClass('dominio_show');
+                break;
+            default:
+                parent.find('#form_dominio').first().hide();
+        }
+    }
+    function validate_dominio_by_criterio(element) {
+        const criterio = Number($(element).parent().parent().parent().parent().parent().parent().find('select[name="criterio_rasgo"]').val());
+        const value = $(element).val();
+        switch (criterio) {
+            case 0:
+                // Nominal
+                if (validator.isEmpty(value) || !validator.maxLength(150, value) || !validator.onlyLetters(value)) {
+                    $(element).val(value.slice(0, -1));
+                }
+                break;
+            case 2:
+                // Cuantitativo
+                if (validator.isEmpty(value) || !validator.onlyNumbers(value)) {
+                    $(element).val(value.slice(0, -1));
+                }
+                break;
+            case 3:
+                // Por intervalo
+                if (validator.isEmpty(value) || !validator.onlyNumbers(value)) {
+                    $(element).val(value.slice(0, -1));
+                }
+                break;
+        }
+        return false;
+    }
+    function add_dominio(element) {
+        // Agregar un HTML con un formulario del valor del dominio segun el elemento\
+        const criterio = Number($(element).parent().parent().parent().find('select[name="criterio_rasgo"]').val());
+        console.log(criterio)
+        $(element).parent().find('div.dominio_show').append((criterio !== 3) ? `<div class="row">
+            <div style="width: 200px; margin: 2px">
+                <input type="text" name="dominio" class="form-control"  onkeyup="validate_dominio_by_criterio(this)">
+            </div>
+            <div style="margin: 6px">
+                <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+            </div>
+        </div>` : `<div class="row">
+            <div style="width: 200px; margin: 2px" class="row">
+                <input type="text" name="dominio" placeholder="Inicio" class="form-control col-sm-6" onkeyup="validate_dominio_by_criterio(this)">
+                <input type="text" name="dominio" placeholder="Fin" class="form-control col-sm-6" onkeyup="validate_dominio_by_criterio(this)">
+            </div>
+            <div style="margin: 6px">
+                <button type="button" onclick="delete_dominio(this)" class="btn btn-danger" aria-label="Left Align" style="padding : 0 6px !important;"><strong>X</strong></button>
+            </div>
+        </div>`);
+    }
+
+    function delete_rango(element) {
+        $(element).parent().parent().parent().remove();
+    }
+
+    function delete_dominio(element) {
+        $(element).parent().parent().remove();
+    }
+
+    function send_form() {
+        
+        // Recolectar datos del formulario
+        let rasgos = [];
+        
+        // Recorrer lista de rasgos
+        let i = 0;
+        let error = false;
+        $("div#list_rasgos div#rasgo").each(function() {
+            const rasgo = $(this);
+            let dominio = [];
+            rasgo.find('div.dominio_show input[name="dominio"]').each(function() {
+                dominio.push($(this).val());
+            });
+            
+            if (dominio.some(e => validator.isEmpty(e))) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hay campos de dominio que estan vacios en el rasgo #' + String(i),
+                  });
+                  error = true;
+            }
+
+            for(let k = 0; k < dominio.length; k++){
+                for(let j = 0; j < dominio.length; j++){
+                    if(k !== j && dominio[k] === dominio[j]){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'El dominio "'+ dominio[k] +'" se repite en el rasgo #' + String(i++),
+                          });
+                          error = true;
+                    }
+                }
+            }
+
+            const criterio = rasgo.find('select[name="criterio_rasgo"]').val();
+            if (validator.isNull(criterio)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar un criterio de comparacion en el rasgo #' + String(i),
+                  });
+                error = true;
+            }
+            if (criterio === "1") {
+                dominio = ["No", "Si"];
+            } else if (criterio === "3") {
+                let min = dominio[0];
+                let error_loop = false;
+                for (let j = 1; j < dominio.length; j++) {
+                    if (min >= dominio[j]) {
+                        error_loop = true;
+                        break;
+                    }
+                    min = dominio[j];
+                }
+                if (error_loop) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Los intervalos no estan correctos en el rasgo #' + String(i),
+                      });
+                    error = true;
+                } else {
+                    let new_dominio = [], j = 0;
+                    while(j < dominio.length) {
+                        new_dominio.push(String(dominio[j] + "-" +  dominio[j+1]));
+                        j += 2;
+                    }
+                    dominio = new_dominio;
+                }
+            }
+
+            const nombre = rasgo.find('input[name="nombre_rasgo"]').val();
+            if (validator.isEmpty(nombre)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El campo nombre del rasgo esta vacio en el rasgo #' + String(i),
+                  });
+                error = true;
+            }
+
+            rasgos.push({
+                'nombre': nombre,
+                'criterio': criterio,
+                'dominio': dominio,
+            });
+            i++;
+        });
+        
+        if (!error) {
+            const nombre_db = $('form input[name="db_nombre"]').val();
+            if (validator.isEmpty(nombre_db)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El campo nombre de la base de datos esta vacio',
+                  });
+                error = true;
+            }
+            let csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+            let data = {
+                'nombre': $('form input[name="db_nombre"]').val(), 
+                //'csrfmiddlewaretoken': csrftoken, 
+                'rasgos': rasgos
+            };
+            //console.log('data', data);
+            // Enviar datos al backend
+            if (!error) {
+                $.ajax({
+                    url: '/{{item.id}}/editarBD/',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function(data, textStatus) {
+                        // Mostrar cartel de OK
+                        Swal.fire(
+                            'Editado!',
+                            'Redirigiendo al listado de bases de datos!',
+                            'success'
+                        );
+                        window.location = "/listarBD/";
+                    }
+                });
+            }
+        }
+    }
+</script>
+{% endblock %}

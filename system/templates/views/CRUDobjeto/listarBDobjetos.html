@@ -1,0 +1,46 @@
+{% extends 'layout/content.html' %}
+
+{% block breadcrumb %}
+    <nav arial-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Principal</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'listar_db' %}">Bases de datos</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'listarBDobjetos' pk=db_item.id %}">Lista DB objetos</a>
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div id="main-wrapper">
+        <section id="main">
+            <h4>Lista de objetos</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Objeto</th>
+                    {% for head in heads %}
+                    <th>{{ head }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for values in items %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        {% for item in values %}
+                        <td>{{ item }}</td>
+                        {% empty %}
+                        Añada nuevos objetos
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <hr>
+            <button type="button" class="btn btn-primary"><a
+                href="{% url 'modificarBDobjeto' pk=db_item.id %}">Modificar</a></button>
+        </section>
+    </div>
+{% endblock %}
